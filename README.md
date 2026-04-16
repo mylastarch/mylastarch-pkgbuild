@@ -1,3 +1,3 @@
-# mylastarchiso
+# mylastarchiso-pkgbuid
 
-My first archiso iso
+PKGBUILS for calamares
