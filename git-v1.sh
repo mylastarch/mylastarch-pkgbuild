@@ -35,7 +35,6 @@ git commit -m "$input"
 
 git push -u origin master
 
-./cleanup*
 
 echo "################################################################"
 echo "###################    Git Push Done      ######################"
