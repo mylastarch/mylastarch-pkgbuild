@@ -1,13 +1,12 @@
 # Maintainer: Philip Müller <philm[at]manjaro[dog]org>
 
 pkgname=calamares
-pkgver=3.4.0
-_pkgver=3.4.0
-pkgrel=14
-_commit=037a317fa986034d02cc37e84ddcf3c2119565df
+pkgver=3.4.2
+_pkgver=3.4.2
+pkgrel=1
 pkgdesc='Distribution-independent installer framework'
 arch=('i686' 'x86_64')
-url="https://gitlab.manjaro.org/applications/calamares"
+url="https://codeberg.org/Calamares/calamares/releases/download"
 license=(
   'BSD-2-Clause'
   'CC0-1.0'
@@ -50,15 +49,12 @@ backup=(
   'usr/share/calamares/modules/unpackfs.conf'
 )
 source=(
-#  "$pkgname-$pkgver.tar.gz::$url/-/archive/v$pkgver/calamares-v$pkgver.tar.gz"
-  "$pkgname-$pkgver-$pkgrel.tar.gz::$url/-/archive/$_commit/$pkgname-$_commit.tar.gz"
-)
-sha256sums=('edb09ad7dca23fe329d10b86c097aa381f000d7541ec7e4ecfa2f4be837b2a97')
+  "$pkgname-$pkgver.tar.gz::$url/v$pkgver/calamares-$pkgver.tar.gz"
+  )
+sha256sums=('733bbbb00dc9f84874bd5c22960952f317ea2537565431179fa2152b2fbfdccc')
 
 prepare() {
-  mv ${srcdir}/calamares-${_commit} ${srcdir}/calamares-${pkgver}
-#  mv ${srcdir}/calamares-v${pkgver} ${srcdir}/calamares-${pkgver}
-  cd ${srcdir}/calamares-${pkgver}
+   cd ${srcdir}/calamares-${pkgver}
   
   # change version
   sed -i -e "s|$pkgver|$_pkgver|g" CMakeLists.txt
@@ -70,7 +66,7 @@ prepare() {
   sed -i -e "s|CALAMARES_VERSION_RC 1|CALAMARES_VERSION_RC 0|g" CMakeLists.txt
 
   # change branding
-  sed -i -e "s/default/manjaro/g" src/branding/CMakeLists.txt
+  
   
   # Apply patches
   local src
@@ -104,18 +100,18 @@ build() {
 package() {
   cd ${srcdir}/calamares-${pkgver}/build
   make DESTDIR="$pkgdir" install
-  install -Dm644 "../data/manjaro-icon.svg" "$pkgdir/usr/share/icons/hicolor/scalable/apps/calamares.svg"
-  install -Dm644 "../data/calamares.desktop" "$pkgdir/usr/share/applications/calamares.desktop"
-  install -Dm755 "../data/calamares_polkit" "$pkgdir/usr/bin/calamares_polkit"
-  install -Dm644 "../data/49-nopasswd-calamares.rules" "$pkgdir/etc/polkit-1/rules.d/49-nopasswd-calamares.rules"
-  chmod 750      "$pkgdir"/etc/polkit-1/rules.d
+  #install -Dm644 "../data/manjaro-icon.svg" "$pkgdir/usr/share/icons/hicolor/scalable/apps/calamares.svg"
+  #install -Dm644 "../data/calamares.desktop" "$pkgdir/usr/share/applications/calamares.desktop"
+  #install -Dm755 "../data/calamares_polkit" "$pkgdir/usr/bin/calamares_polkit"
+  #install -Dm644 "../data/49-nopasswd-calamares.rules" "$pkgdir/etc/polkit-1/rules.d/49-nopasswd-calamares.rules"
+  #chmod 750      "$pkgdir"/etc/polkit-1/rules.d
 
   # rename services-systemd back to services
-  mv "$pkgdir/usr/lib/calamares/modules/services-systemd" "$pkgdir/usr/lib/calamares/modules/services"
-  mv "$pkgdir/usr/share/calamares/modules/services-systemd.conf" "$pkgdir/usr/share/calamares/modules/services.conf"
-  sed -i -e 's/-systemd//' "$pkgdir/usr/lib/calamares/modules/services/module.desc"
-  sed -i -e 's/-systemd//' "$pkgdir/usr/share/calamares/settings.conf"
+  #mv "$pkgdir/usr/lib/calamares/modules/services-systemd" "$pkgdir/usr/lib/calamares/modules/services"
+  #mv "$pkgdir/usr/share/calamares/modules/services-systemd.conf" "$pkgdir/usr/share/calamares/modules/services.conf"
+  #sed -i -e 's/-systemd//' "$pkgdir/usr/lib/calamares/modules/services/module.desc"
+  #sed -i -e 's/-systemd//' "$pkgdir/usr/share/calamares/settings.conf"
   
   # fix branding install
-  cp -av "../src/branding/manjaro" "$pkgdir/usr/share/calamares/branding/"
+  #cp -av "../src/branding/manjaro" "$pkgdir/usr/share/calamares/branding/"
 }
